@@ -1,0 +1,92 @@
+plugins {
+  id 'org.springframework.boot' version '2.6.6'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'java'
+  id "com.github.node-gradle.node" version "3.2.1"
+}
+
+group = 'io.hskim'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  compileOnly 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
+}
+
+test {
+  exclude '**/*'
+}
+
+node {
+  version = '16.13.2'
+  npmVersion = '8.4.1'
+  workDir = file('./src/main/vue')
+  npmWorkDir = file('./src/main/vue')
+  nodeModulesDir = file('./src/main/vue')
+}
+
+task setup(type: NpmTask) {
+  description = 'Install nodejs packages'
+  args = ['install']
+  inputs.files file('package.json')
+  outputs.files file('node_modules')
+}
+
+task buildVue(type: NpmTask, dependsOn: setup) {
+  description = 'build vuejs'
+  args = ['run', 'build']
+}
+
+// 빌드 된 class 파일을 bin 디렉토리로 옮기기 전에 buildVue 실행
+processResources.dependsOn 'buildVue'
+
+// task makeInstallFile() {
+//   group 'build'
+//   dependsOn ordered(":buildVue", ":bootJar")
+
+//   doLast {
+//     delete("$buildDir/dist")
+//     copy {
+//       from "$buildDir/libs/VoiceStudio-1.0.0.jar"
+//       into "$buildDir/dist/lib"
+//     }
+//     copy {
+//       from "./script/VoiceStudio.bat"
+//       into "$buildDir/dist/startup_windows"
+//     }
+//     copy {
+//       from "./script/VoiceStudio.sh"
+//       into "$buildDir/dist/startup_unix"
+//     }
+//     copy {
+//       from "./src/main/resources/application.yml"
+//       into "$buildDir/dist/conf"
+//       rename 'application.yml', 'VoiceStudio.yml'
+//     }
+//     copy {
+//       from "./src/main/resources/logback.xml"
+//       into "$buildDir/dist/conf"
+//     }
+//   }
+// }
+
+// 실행 의존서의 순서를 지키기 위함
+def ordered(String... dependencyPaths) {
+  def dependencies = dependencyPaths.collect { tasks.getByPath(it) }
+  for (int i = 0; i < dependencies.size() - 1; i++) {
+    dependencies[i + 1].mustRunAfter(dependencies[i])
+  }
+  return dependencies
+}
