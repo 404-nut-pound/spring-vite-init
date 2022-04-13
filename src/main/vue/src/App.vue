@@ -1,19 +1,16 @@
 <template>
   <div>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Hello Vue 3 + Vite 2" />
-    <button @click="callApi">API 테스트</button>
+    <img alt="Vue logo" src="./assets/logo.png" /><br />
+    <button @click="callApi">API 테스트</button><br /><br />
+    <router-link to="/hello">Hello</router-link><br /><br />
+    <router-link to="/about">About</router-link><br /><br />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-  },
   data() {
     return {
       //
@@ -23,8 +20,8 @@ export default {
     callApi: function () {
       this.axios
         .get("/api/hello", {})
-        .then((response) => console.log(response))
-        .catch((error) => console.error(error));
+        .then((response) => alert("정상 통신"))
+        .catch((error) => alert("통신 실패"));
     },
   },
 };
