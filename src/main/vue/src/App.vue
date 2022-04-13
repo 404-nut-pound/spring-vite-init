@@ -1,14 +1,12 @@
 <template>
   <div>
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Hello Vue 3 + Vite" />
+    <HelloWorld msg="Hello Vue 3 + Vite 2" />
     <button @click="callApi">API 테스트</button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
@@ -23,7 +21,7 @@ export default {
   },
   methods: {
     callApi: function () {
-      axios
+      this.axios
         .get("/api/hello", {})
         .then((response) => console.log(response))
         .catch((error) => console.error(error));
