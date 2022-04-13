@@ -1,13 +1,3 @@
-<script setup>
-import { ref } from "vue";
-
-defineProps({
-  msg: String,
-});
-
-const count = ref(0);
-</script>
-
 <template>
   <div>
     <h1>{{ msg }}</h1>
@@ -34,6 +24,16 @@ const count = ref(0);
     </p>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+
+defineProps({
+  msg: String,
+});
+
+const count = ref(0);
+</script>
 
 <style scoped>
 a {
