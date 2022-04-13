@@ -30,8 +30,8 @@ test {
 }
 
 node {
-  version = '16.13.2'
-  npmVersion = '8.4.1'
+  // version = '16'
+  // npmVersion = '8'
   workDir = file('./src/main/vue')
   npmWorkDir = file('./src/main/vue')
   nodeModulesDir = file('./src/main/vue')
